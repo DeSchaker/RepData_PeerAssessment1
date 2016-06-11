@@ -2,8 +2,9 @@
 title: "Reproducible Research: Peer Assessment 1"
 output: 
   html_document:
-    keep_md: true
+    keep_md: yes
 ---
+
 
 
 ## Loading and preprocessing the data
@@ -30,7 +31,7 @@ This part consists of the following steps:
 df_stepsday <- aggregate(steps ~ date, data=df_act, FUN=sum, na.rm=TRUE )
 ```
 2. Make a histogram of the total number of steps taken each day
-```{r echo=TRUE}
+```{r echo=TRUE, fig.path="figures/"}
 hist(df_stepsday$steps,breaks=10,col="purple",xlab="steps taken",main="Steps taken per day")
 ```
 
@@ -44,7 +45,7 @@ cat(paste0("median of total steps per day: ",median(df_stepsday$steps)))
 ## What is the average daily activity pattern?
 First we calculate the mean steps per interval across the days and put the results in the vector mean_steps, next we make a time plot with the names and values of this vector. Finally we calculate which interval contains the maximum number of average steps.
 
-```{r echo=TRUE}
+```{r echo=TRUE, fig.path="figures/"}
 mean_steps <- tapply(df_act$steps,INDEX=df_act$interval,FUN=mean,na.rm=TRUE)
 plot(names(mean_steps),mean_steps,type="l",xlab="5 minute interval",ylab="mean steps",
      main="average daily activity pattern")
@@ -87,7 +88,7 @@ df_imputed$steps <- mapply(FUN=my_filler,df_imputed$steps,df_imputed$interval)
 
 
 Now we create a panelplot with two histogram
-```{r echo=TRUE}
+```{r echo=TRUE, fig.path="figures/"}
 df_stepsday_imputed = aggregate(steps ~ date,data=df_imputed,FUN=sum)
 
 par(mfrow=c(1,2))
@@ -114,7 +115,7 @@ For readability of the source  my (dutch windows) system needs to be set to the 
 Next we create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
 Next we make a panel plot containing a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
-```{r}
+```{r echo=TRUE, fig.path="figures/"}
 # First we set R to english locale (for compatibility with Coursera)
 Sys.setlocale("LC_TIME", "English")
 

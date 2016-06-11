@@ -1,6 +1,7 @@
 # Reproducible Research: Peer Assessment 1
 
 
+
 ## Loading and preprocessing the data
 
 First we read in the data from the activity.csv file, that was downloaded from the [course website](https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip).
@@ -32,7 +33,7 @@ df_stepsday <- aggregate(steps ~ date, data=df_act, FUN=sum, na.rm=TRUE )
 hist(df_stepsday$steps,breaks=10,col="purple",xlab="steps taken",main="Steps taken per day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](figures/unnamed-chunk-4-1.png)<!-- -->
 
 3. Calculate and report the mean and median of the total number of steps taken per day
 
@@ -62,7 +63,7 @@ plot(names(mean_steps),mean_steps,type="l",xlab="5 minute interval",ylab="mean s
      main="average daily activity pattern")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![](figures/unnamed-chunk-6-1.png)<!-- -->
 
 ```r
 cat(paste("Interval with maximum number of average steps:", names(which.max(mean_steps))))
@@ -124,7 +125,7 @@ hist(df_stepsday_imputed$steps,breaks=10,col=rgb(0,1,1,1/4),ylim=c(0,25),xlab="s
 hist(df_stepsday$steps,breaks=10,col=rgb(1,0,0,1/4),ylim=c(0,25),xlab="steps taken",main="Unimputed data\nSteps taken per day")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+![](figures/unnamed-chunk-8-1.png)<!-- -->
 
 ```r
 cat(paste0("mean steps per day of imputed data: ", mean(df_stepsday_imputed$steps)))
@@ -177,5 +178,5 @@ xyplot(steps ~ interval | factor(weekday), data=plotdata, aspect=1/3, type="l",
        main = "Time series plot for weekend en weekdays")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+![](figures/unnamed-chunk-9-1.png)<!-- -->
 
