@@ -77,5 +77,84 @@ print(paste("Interval with maximum number of average steps:", names(which.max(me
 ## Imputing missing values
 
 
+```r
+# report number of missing values
+sum(is.na(df_act$steps))
+```
+
+```
+## [1] 2304
+```
+
+```r
+# from df_act use either steps, or in case of NA values use the mean of steps at a 
+# specific interval and put the result in df_imputed
+
+my_filler <- function(steps,interval) {
+  if(is.na(steps)) {
+    my_val <- mean_steps[as.character(interval)]
+  }
+  else {
+    my_val <- steps
+  }
+  
+  return(my_val)
+}
+
+df_imputed <- df_act
+df_imputed$steps <- mapply(FUN=my_filler,df_imputed$steps,df_imputed$interval)
+```
+
+Now create a histogram
+
+```r
+df_stepsday_imputed = aggregate(steps ~ date,data=df_imputed,FUN=sum)
+
+par(mfrow=c(1,2))
+#first add a histogram for the imputed data
+hist(df_stepsday_imputed$steps,breaks=10,col=rgb(0,1,1,1/4),ylim=c(0,25),xlab="steps taken",main="Imputed data\n Steps taken per day")
+# add the histogram for the unimputed data to the plot to see if the patterns differ
+hist(df_stepsday$steps,breaks=10,col=rgb(1,0,0,1/4),ylim=c(0,25),xlab="steps taken",main="Unimputed data\nSteps taken per day")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
+
+```r
+mean(df_stepsday_imputed$steps)
+```
+
+```
+## [1] 10766.19
+```
+
+```r
+median(df_stepsday_imputed$steps)
+```
+
+```
+## [1] 10766.19
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?
+
+
+```r
+# First we set R to english locale (for compatibility with Coursera)
+Sys.setlocale("LC_TIME", "English")
+```
+
+```
+## [1] "English_United States.1252"
+```
+
+```r
+df_imputed$dayname <- weekdays(df_stepsday_imputed$date)
+df_imputed$weekday <- as.factor(ifelse(df_imputed$dayname %in% c("Sunday","Saturday"),"weekend","weekday"))
+
+library(lattice)
+plotdata <- aggregate(steps ~ interval + weekday, df_imputed, mean)
+xyplot(steps ~ interval | factor(weekday), data=plotdata, aspect=1/3, type="l")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
