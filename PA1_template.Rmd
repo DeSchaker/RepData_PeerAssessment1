@@ -30,27 +30,48 @@ This part consists of the following steps:
 df_stepsday <- aggregate(steps ~ date, data=df_act, FUN=sum, na.rm=TRUE )
 ```
 2. Make a histogram of the total number of steps taken each day
-```{r}
+```{r echo=TRUE}
 hist(df_stepsday$steps,breaks=10,col="purple",xlab="steps taken",main="Steps taken per day")
 ```
 
 3. Calculate and report the mean and median of the total number of steps taken per day
-```{r}
+```{r echo=TRUE}
 mean(df_stepsday$steps)
 median(df_stepsday$steps)
 
 ```
 
-
-
-
-
 ## What is the average daily activity pattern?
+First we calculate the mean steps per interval across the days and put the results in the vector mean_steps, next we make a time plot with the names and values of this vector. Finally we calculate which interval contains the maximum number of average steps.
+
+```{r echo=TRUE}
+mean_steps <- tapply(df_act$steps,INDEX=df_act$interval,FUN=mean,na.rm=TRUE)
+plot(names(mean_steps),mean_steps,type="l",xlab="5 minute interval",ylab="mean steps",
+     main="average daily activity pattern")
+
+print(paste("Interval with maximum number of average steps:", names(which.max(mean_steps))))
+```
 
 
 
 ## Imputing missing values
 
+```{r}
+#df_imputed <- transform(df_act,ifelse(is.na(df_act$steps),))
+my_filler <- function(steps,interval) {
+  if(is.na(steps)) {
+    my_val <- mean_steps[as.character(interval)]
+  }
+  else {
+    my_val <- steps
+  }
+  
+  return(my_val)
+}
 
+df_imputed <- df_act
+df_imputed$steps <- mapply(FUN=my_filler,df_imputed$steps,df_imputed$interval)
+
+```
 
 ## Are there differences in activity patterns between weekdays and weekends?

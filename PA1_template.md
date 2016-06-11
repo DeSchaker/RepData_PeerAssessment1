@@ -52,11 +52,25 @@ median(df_stepsday$steps)
 ## [1] 10765
 ```
 
-
-
-
-
 ## What is the average daily activity pattern?
+First we calculate the mean steps per interval across the days and put the results in the vector mean_steps, next we make a time plot with the names and values of this vector. Finally we calculate which interval contains the maximum number of average steps.
+
+
+```r
+mean_steps <- tapply(df_act$steps,INDEX=df_act$interval,FUN=mean,na.rm=TRUE)
+plot(names(mean_steps),mean_steps,type="l",xlab="5 minute interval",ylab="mean steps",
+     main="average daily activity pattern")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
+```r
+print(paste("Interval with maximum number of average steps:", names(which.max(mean_steps))))
+```
+
+```
+## [1] "Interval with maximum number of average steps: 835"
+```
 
 
 
